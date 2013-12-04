@@ -1,0 +1,38 @@
+CROSS_HOST="i686-w64-mingw32"
+inherit cross
+
+NAME="mingw64-i686-aalib"
+VERSION=1.4rc5
+RELEASE=1
+CATEGORY="Devel"
+SUMMARY="ASCII art library for Win32 toolchain"
+DESCRIPTION="AA-lib is a low level gfx library just as many other libraries are.
+The main difference is that AA-lib does not require graphics device. In fact,
+there is no graphical output possible. AA-lib replaces those old-fashioned
+output methods with powerful ascii-art renderer."
+HOMEPAGE="http://aa-project.sourceforge.net/"
+SRC_URI="mirror://sourceforge/aa-project/aalib-${VERSION}.tar.gz"
+SRC_DIR="aalib-1.4.0"
+PATCH_URI="
+	1.4rc5-aclocal.patch
+	1.4rc5-ncurses-reentrant.patch
+	1.4rc5-no-undefined.patch
+	1.4rc5-win32.patch
+"
+
+DISTCLEANFILES="aclocal.m4"
+
+CYGCONF_ARGS="
+	--with-ncurses=${CROSS_PREFIX}
+	--with-curses-driver
+	--without-slang-driver
+	--without-x11-driver
+	ac_cv_func_connect=yes
+	ac_cv_func_gethostbyname=yes
+"
+LIBS="-lws2_32"
+
+src_install() {
+	cd ${B}
+	cyginstall bin_PROGRAMS= man_MANS= INFO_DEPS=
+}
